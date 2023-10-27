@@ -53,8 +53,7 @@ def annotate(image):
     model_type = "vit_h"
     # device = "cuda"
 
-    sam = sam_mo        print(labelled) 
-del_registry[model_type](checkpoint=sam_checkpoint)
+    sam = sam_model_registry[model_type](checkpoint=sam_checkpoint)
     # sam.to(device=device)
 
     mask_generator = SamAutomaticMaskGenerator(
@@ -81,9 +80,9 @@ del_registry[model_type](checkpoint=sam_checkpoint)
         labelled['name'] = label
 
         # convert from numpy array to list
-        labelled['segmentation'] = val.tolist()
+        labelled['segmentation'] = labelled['segmentation'].tolist()
 
-        # add ot list of masks for this image
+        # add to list of masks for this image
         labelled_masks.append(labelled)
 
     return labelled_masks
@@ -103,7 +102,7 @@ def read_image(image_path):
     json_path = image_path.split('.')[0] + '.json' 
 
     with open(json_path, "w") as f:
-        json.dump(labels, f)
+        json.dump(labels, f, indent=4)
 
 
 if __name__ == "__main__":
