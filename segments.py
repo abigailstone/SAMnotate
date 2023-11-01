@@ -31,9 +31,11 @@ def show_image(image, mask):
     plt.show()
 
 
-def annotate(image):
+def annotate(image, n_masks=10):
     """
-    Run SegmentAnything annotation and save the masks
+    Run SegmentAnything annotation and save the masks 
+    image: RGB image 
+    n_masks: maximum number of masks to annotate 
     """
 
     sam_checkpoint = os.path.join("checkpoints", "sam_vit_h_4b8939.pth")
@@ -54,10 +56,11 @@ def annotate(image):
     )
 
     masks = mask_generator.generate(image)
+    masks = sorted(masks, key=lambda d: d['area'], reverse=True)
 
     labelled_masks = []
 
-    for mask in masks:
+    for mask in masks[:n_masks]:
 
         show_image(image, mask['segmentation'])
         label = input("Label: ")
@@ -96,7 +99,8 @@ def read_image(image_path):
 if __name__ == "__main__":
 
     parser = argparse.ArgumentParser()
-    parser.add_argument("input_img", help="Path to image")
+    parser.add_argument("input_img", help="Path to image") 
+    parser.add_argument("-n", "--n_masks", help="Maximum number of masks to display")
     args = parser.parse_args()
 
     if not os.path.exists(args.input_img):

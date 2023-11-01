@@ -47,7 +47,15 @@ This will run Segment Anything on the image, and then display the image with eac
 - Anything that is not a listed food object in the spreadsheet should be marked `0` 
 - The food objects that are in the spreadsheet should be labelled with the item in the `Items` column of the spreadsheet. Please label in all lowercase, using underscores in place of spaces. Ignore any special characters (i.e. &) and accents ("sautéed should just be sauteed").   
 
-As above, press any key to move to the next segment.
+As above, press any key to move to the next segment. 
+
+The segments will display in descending order! By default, you will only see 10 masks. If an image has a lot of small items and you don't set a label for every food item, increase the maximum number of masks to display using the `n_masks` flag: 
+
+```
+python3 segments.py /path/to/your/img.jpg --n 20
+```
+
+`n_masks` is set to 10 by default, but change it to whatever you'd like. It should be high enough that you label every food item in the image, but low enough that the amount of tedious clicking is reduced. This may vary by image. 
 
 **Note**: If you have a GPU, uncomment the `device="cuda"` and `sam.to(device=device)` lines in `segments.py`. This will speed up inference! 
 
