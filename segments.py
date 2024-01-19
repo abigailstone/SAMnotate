@@ -12,7 +12,7 @@ from segment_anything import sam_model_registry, SamAutomaticMaskGenerator, SamP
 
 def show_mask(mask, ax):
     """
-    show mask on image 
+    show mask on image
     https://github.com/facebookresearch/segment-anything/blob/main/notebooks/predictor_example.ipynb
     """
     color = np.array([30/255, 144/255, 255/255, 0.6])
@@ -33,9 +33,9 @@ def show_image(image, mask):
 
 def annotate(image, n_masks=10):
     """
-    Run SegmentAnything annotation and save the masks 
-    image: RGB image 
-    n_masks: maximum number of masks to annotate 
+    Run SegmentAnything annotation and save the masks
+    image: RGB image
+    n_masks: maximum number of masks to annotate
     """
 
     sam_checkpoint = os.path.join("checkpoints", "sam_vit_h_4b8939.pth")
@@ -79,18 +79,18 @@ def annotate(image, n_masks=10):
 
 
 
-def read_image(image_path):
+def read_image(image_path, n_masks):
     """
-    Read a single input image, run segmentation inference, and 
+    Read a single input image, run segmentation inference, and
     dump segments into a .json
     """
 
-    img = cv2.imread(image_path) 
+    img = cv2.imread(image_path)
     img = cv2.cvtColor(img, cv2.COLOR_BGR2RGB) # color conversion for matplotlib
 
-    labels = annotate(img)
+    labels = annotate(img, n_masks)
 
-    json_path = image_path.split('.')[0] + '.json' 
+    json_path = image_path.split('.')[0] + '.json'
 
     with open(json_path, "w") as f:
         json.dump(labels, f, indent=4)
@@ -99,11 +99,15 @@ def read_image(image_path):
 if __name__ == "__main__":
 
     parser = argparse.ArgumentParser()
-    parser.add_argument("input_img", help="Path to image") 
-    parser.add_argument("-n", "--n_masks", help="Maximum number of masks to display")
+    parser.add_argument("input_img",
+                        help="Path to image")
+    parser.add_argument("-n", "--n_masks",
+                        default=10,
+                        type=int,
+                        help="Maximum number of masks to display")
     args = parser.parse_args()
 
     if not os.path.exists(args.input_img):
         print("Invalid input image path")
     else:
-        read_image(args.input_img)
+        read_image(args.input_img, args.n_masks)

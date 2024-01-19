@@ -52,7 +52,7 @@ As above, press any key to move to the next segment.
 The segments will display in descending order! By default, you will only see 10 masks. If an image has a lot of small items and you don't set a label for every food item, increase the maximum number of masks to display using the `n_masks` flag: 
 
 ```
-python3 segments.py /path/to/your/img.jpg --n 20
+python3 segments.py /path/to/your/img.jpg --n_masks 20
 ```
 
 `n_masks` is set to 10 by default, but change it to whatever you'd like. It should be high enough that you label every food item in the image, but low enough that the amount of tedious clicking is reduced. This may vary by image. 
