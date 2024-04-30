@@ -33,7 +33,7 @@ python3 resize_rotate.py /path/to/your/images /path/to/output
 ``` 
 The two command line arguments are the path to your input folder and a path to an empty directory where you want to store your resized images. Don't just over-write your images!!! I wrote this quickly and didn't put anything in here that lets you go "back", so if you mis-click you'll want to run it again on the parts where you made a mistake. 
 
-The script will open a window displaying each image. If it needs to be rotated (i.e. the resizing makes it look super distorted), press `r` while you're in the image display window. It'll pop open another window showing the rotated version. If it looks good, press any other key while the window is selected. If no rotation is necessary, press any key to move to the next image.   
+The script will open a window displaying each image. If it needs to be rotated (i.e. the resizing makes it look super distorted), press `r` while you're in the image display window. It'll pop open another window showing the rotated version. If it looks good, press `q` while the window is selected. If no rotation is necessary, press `q` to move to the next image.   
 
 ### Segment Annotations
 
@@ -49,17 +49,12 @@ This will run Segment Anything on the image, and then display the image with eac
 
 As above, press any key to move to the next segment. 
 
-The segments will display in descending order! By default, you will only see 10 masks. If an image has a lot of small items and you don't set a label for every food item, increase the maximum number of masks to display using the `n_masks` flag: 
+The segments will display in descending order! By default, you will only see 10 masks. If an image has a lot of small items and you don't set a label for every food item, increase the maximum number of masks to display using the `--n_masks` (shortcut `-n`) flag: 
 
 ```
-python3 segments.py /path/to/your/img.jpg --n_masks 20
+python3 segments.py /path/to/your/img.jpg -n 20
 ```
 
 `n_masks` is set to 10 by default, but change it to whatever you'd like. It should be high enough that you label every food item in the image, but low enough that the amount of tedious clicking is reduced. This may vary by image. 
 
 **Note**: If you have a GPU, uncomment the `device="cuda"` and `sam.to(device=device)` lines in `segments.py`. This will speed up inference! 
-
-
-## Other notes 
-
-I wrote this quickly. I know it works on Ubuntu 22.04. I am not sure about anything else. If you get weird errors, need help with the conda setup, etc., shoot me a message on Slack and I can help troubleshoot. Don't get stuck trying to de-bug my sloppy code!!!
