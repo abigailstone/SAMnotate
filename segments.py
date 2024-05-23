@@ -31,7 +31,7 @@ def show_image(image, mask):
     plt.show()
 
 
-def annotate(image, n_masks=10):
+def annotate(image, n_masks=10, gpu=False):
     """
     Run SegmentAnything annotation and save the masks
     image: RGB image
@@ -40,18 +40,16 @@ def annotate(image, n_masks=10):
 
     sam_checkpoint = os.path.join("checkpoints", "sam_vit_h_4b8939.pth")
     model_type = "vit_h"
-    # device = "cuda"
 
     sam = sam_model_registry[model_type](checkpoint=sam_checkpoint)
-    # sam.to(device=device)
+
+    if gpu:
+        device = "cuda"
+        sam.to(device=device)
 
     mask_generator = SamAutomaticMaskGenerator(
         model=sam,
         points_per_side=16,
-        # pred_iou_thresh=0.86,
-        # stability_score_thresh=0.92,
-        # crop_n_layers=1,
-        # crop_n_points_downscale_factor=2,
         min_mask_region_area=100
     )
 
@@ -79,7 +77,7 @@ def annotate(image, n_masks=10):
 
 
 
-def read_image(image_path, n_masks):
+def read_image(image_path, n_masks, gpu=False):
     """
     Read a single input image, run segmentation inference, and
     dump segments into a .json
@@ -88,7 +86,7 @@ def read_image(image_path, n_masks):
     img = cv2.imread(image_path)
     img = cv2.cvtColor(img, cv2.COLOR_BGR2RGB) # color conversion for matplotlib
 
-    labels = annotate(img, n_masks)
+    labels = annotate(img, n_masks, gpu)
 
     json_path = image_path.split('.')[0] + '.json'
 
@@ -105,9 +103,13 @@ if __name__ == "__main__":
                         default=10,
                         type=int,
                         help="Maximum number of masks to display")
+    parser.add_argument("--gpu",
+                        default=False,
+                        type=bool,
+                        help="Whether or not to try to use GPU")
     args = parser.parse_args()
 
     if not os.path.exists(args.input_img):
         print("Invalid input image path")
     else:
-        read_image(args.input_img, args.n_masks)
+        read_image(args.input_img, args.n_masks, args.gpu)
