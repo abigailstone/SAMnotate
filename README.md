@@ -31,9 +31,9 @@ Run `resize_rotate.py` on your directory of freshly-downloaded images like so:
 ```
 python3 resize_rotate.py /path/to/your/images /path/to/output
 ``` 
-The two command line arguments are the path to your input folder and a path to an empty directory where you want to store your resized images. Don't just over-write your images!!! I wrote this quickly and didn't put anything in here that lets you go "back", so if you mis-click you'll want to run it again on the parts where you made a mistake. 
+The two command line arguments are the path to your input folder and a path to an empty directory where you want to store your resized images. Don't just over-write your images!!! 
 
-The script will open a window displaying each image. If it needs to be rotated (i.e. the resizing makes it look super distorted), press `r` while you're in the image display window. It'll pop open another window showing the rotated version. If it looks good, press `q` while the window is selected. If no rotation is necessary, press `q` to move to the next image.   
+The script will detect if an image needs to be rotated, and will then rotate and resize as necessary.
 
 ### Segment Annotations
 
@@ -57,4 +57,4 @@ python3 segments.py /path/to/your/img.jpg -n 20
 
 `n_masks` is set to 10 by default, but change it to whatever you'd like. It should be high enough that you label every food item in the image, but low enough that the amount of tedious clicking is reduced. This may vary by image. 
 
-**Note**: If you have a GPU, uncomment the `device="cuda"` and `sam.to(device=device)` lines in `segments.py`. This will speed up inference! 
+**Note**: If you have a GPU, use the command line flag `--gpu True` This will speed up inference! 
